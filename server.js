@@ -23,7 +23,8 @@ const Role = db.role;
 
 // mongodb://localhost:27017/shin_ei_db
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  // .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  .connect(`mongodb+srv://shin-ei:shin-ei-1234@cluster0.y10pc.mongodb.net/shin-ei?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
