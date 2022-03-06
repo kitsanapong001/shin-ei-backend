@@ -39,6 +39,7 @@ db.mongoose
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to my application." });
+  res.json({ connectDB: `Server is running on port ${PORT}` });
 });
 
 // routes
