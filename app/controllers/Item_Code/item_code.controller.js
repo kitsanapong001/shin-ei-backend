@@ -7,6 +7,7 @@ exports.createItem = (req, res) => {
     const item = new Item_Code ({
         item_code: req.body.item_code,
         description: req.body.description,
+        dateCreate: dateTime = new Date(),
     });
 
     item.save(err => {
@@ -22,12 +23,22 @@ exports.createItem = (req, res) => {
 
 // Retrieve all Item code from the database.
 exports.findAll = (req, res) => {
-
+    var mysort = { dateCreate: -1 };
     Item_Code.find({}, function(err, result) {
         if (err) {
             res.send({ message: "find all error" });
         } else {
           res.json(result);
+        }
+      }).sort(mysort);
+};
+
+exports.findOne = (req, res) => {
+    Item_Code.findById(req.query.id, function(err, result) {
+        if (err) {
+            res.send({ message: "find all error" });
+        } else {
+            res.json(result);
         }
       });
 };
@@ -45,9 +56,8 @@ exports.delete = (req, res) => {
     });
 }
 
-
 exports.update = (req, res) => {
-    Item_Code.findByIdAndUpdate(req.body.id , { item_code: req.body.item_code, description:req.body.description },
+    Item_Code.findByIdAndUpdate(req.body.id , { item_code: req.body.item_code, description:req.body.description,dateUpdate: dateTime = new Date(), },
         function (err, docs) {
             if (err){
                 console.log(err)
@@ -55,7 +65,7 @@ exports.update = (req, res) => {
             }
             else{
                 console.log("Updated User : ", docs);
-                res.send({ message: "update successfully !" });
+                res.send({ message: "update item code successfully !" });
             }
         }
     );

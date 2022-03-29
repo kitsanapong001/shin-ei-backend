@@ -1,90 +1,150 @@
 const db = require("../../models");
-const Requests = db.requests
+const Requests = db.requests;
+const Requests_job = db.requests_job;
 
-// Create and Save a new Item code
 exports.createRequests = (req, res) => {
-
-    const requests = new Requests ({
-            request_number: req.body.request_number,
-            item_Code: req.body.item_Code,
-            description: req.body.description,  
-            qty: req.body.qty,
-            unit: req.body.unit,
-            unit_price: req.body.unit_price,
-            unit_total: req.body.unit_total,
-            date: req.body.date,
-    });
-
-    requests.save(err => {
-        if (err) {
-            res.status(500).send({ message: err });
+  const requests = new Requests({
+    request_number: req.body.request_number,
+    date: req.body.date,
+  });
+  var errLog = 0;
+  requests.save((errRq, last_id) => {
+    if (errRq) {
+      errLog++;
+      return;
+    }
+    if (last_id) {
+      // console.log(last_id._id);
+      req.body.job.forEach((element, index) => {
+        const requests_job = new Requests_job({
+          item_code: element.item_code,
+          description: element.description,
+          qty: element.qty,
+          unit: element.unit,
+          unit_price: element.unit_price,
+          unit_total: element.unit_total,
+          requests: last_id._id,
+        });
+        requests_job.save((errJob) => {
+          if (errJob) {
+            errLog++;
             return;
           }
-
-          res.send({ message: "Create requests successfully !" });
-    })
-  
+        });
+      });
+    }
+    if (errLog > 0) {
+      res.send({ message: "Create requests error !" });
+    } else {
+      res.send({ message: "Create requests successfully !" });
+    }
+  });
 };
 
-// Retrieve all Item code from the database.
 exports.findAll = (req, res) => {
-
-    Requests.find({}, function(err, result) {
-        if (err) {
-            res.send({ message: "find all error" });
-        } else {
-          res.json(result);
-        }
-      });
+  Requests.find({}, function (err, result) {
+    if (err) {
+      res.send({ message: "find all error" });
+    } else {
+      //   Requests_job.find({ requests: result }, function (errJob, resultJob) {
+      //     if (errJob) {
+      //       res.send({ message: "find all error" });
+      //     } else {
+      //       result.push.apply(result, resultJob);
+      //       console.log(result);
+      //       res.json(result);
+      //     }
+      //   });
+      res.json(result);
+    }
+  });
 };
 
 exports.delete = (req, res) => {
-    Requests.findByIdAndDelete(req.body.id, function (err, docs) {
-        if (err){
-            console.log(err)
-            res.send({ message: "delete error" });
-        }
-        else{
-            console.log("Deleted : ", docs);
-            res.send({ message: "Delete requests successfully !" });
-        }
-    });
-}
+  Requests.findByIdAndDelete(req.body.id, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.send({ message: "delete error" });
+    } else {
+      console.log("Deleted : ", docs);
+      res.send({ message: "Delete requests successfully !" });
+    }
+  });
+};
 
 exports.update = (req, res) => {
-    Requests.findByIdAndUpdate(req.body.id , 
-        { 
-            request_number: req.body.request_number,
-            item_Code: req.body.item_Code,
-            description: req.body.description,
-            qty: req.body.qty,
-            unit: req.body.unit,
-            unit_price: req.body.unit_price,
-            unit_total: req.body.unit_total,
-            date: req.body.date
-        },
-        function (err, docs) {
-            if (err){
-                console.log(err)
-                res.send({ message: "update error" });
+  var errStatus = 0;
+  Requests.findByIdAndUpdate(
+    req.body.requests._id,
+    {
+      request_number: req.body.requests.request_number,
+      date: req.body.requests.date,
+    },
+    function (err, docs) {
+      if (err) {
+        errStatus++;
+        console.log(err);
+      } else {
+        req.body.requests.job.forEach((element) => {
+          Requests_job.findByIdAndUpdate(
+            element._id,
+            {
+              item_code: element.item_code,
+              description: element.description,
+              qty: element.qty,
+              unit: element.unit,
+              unit_price: element.unit_price,
+              unit_total: element.unit_total,
+            },
+            function (errJob, docsJob) {
+              if (errJob) {
+                errStatus++;
+              }
             }
-            else{
-                console.log("Updated User : ", docs);
-                res.send({ message: "update requests successfully !" });
-            }
+          );
+        });
+        if (errStatus > 0) {
+          res.send({ message: "update error" });
+        } else {
+          console.log("Updated request : ", docs);
+          res.send({ message: "update requests successfully !" });
         }
-    );
+      }
+    }
+  );
 };
 
 exports.getByRequest = (req, res) => {
-    let RequestID = req.body.request_number;
-    console.log('hi',req.body);
-    Requests.find({request_number: RequestID}, function(err, result) {
-        if (err) {
-            res.send({ message: "find By Request err" });
-        } else {
-          res.json(result);
-        }
-    });
+  Requests.findById(req.query.id, function (err, result) {
+    if (err) {
+      res.send({ message: "find all error" });
+    } else {
+      res.json(result);
+    }
+  });
+};
 
-}
+exports.getRequests_job = (req, res) => {
+  // console.log(req.query.id);
+  Requests_job.find(
+    { requests: { $in: req.query.id } },
+    function (err, result) {
+      if (err) {
+        res.send({ message: "find all error" });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+};
+// exports.getRequests_job = (req, res) => {
+//   Requests_job.find({}, function (err, result) {
+//     if (err) {
+//       res.send({ message: "find all error" });
+//     } else {
+//       res.json(result);
+//     }
+//   })
+//     .populate("requests", "-__v")
+//     .lean();
+// };

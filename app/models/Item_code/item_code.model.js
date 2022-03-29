@@ -5,7 +5,9 @@ const Item_Code = mongoose.model(
     new mongoose.Schema(
         {
             item_code: String,
-            description: String
+            description: String,
+            dateCreate: { type: Date, default: null },
+            dateUpdate: { type: Date, default: null },
         }
     )
 );

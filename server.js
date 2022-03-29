@@ -24,15 +24,18 @@ const Role = db.role;
 // mongodb://localhost:27017/shin_ei_db
 db.mongoose
   // .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-  .connect(`mongodb+srv://shin-ei:shin-ei-1234@cluster0.y10pc.mongodb.net/shin-ei?retryWrites=true&w=majority`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect(
+    `mongodb+srv://shin-ei:shin-ei-1234@cluster0.y10pc.mongodb.net/shin-ei?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("Connection error", err);
     process.exit();
   });
@@ -48,6 +51,7 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/Item_Code/item_code.routes")(app);
 require("./app/routes/requests/requests.routes")(app);
 require("./app/routes/requestsID/requestsID.routes")(app);
+require("./app/routes/job/job.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
@@ -59,8 +63,8 @@ function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
-        name: "user"
-      }).save(err => {
+        name: "user",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -69,8 +73,8 @@ function initial() {
       });
 
       new Role({
-        name: "moderator"
-      }).save(err => {
+        name: "moderator",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -79,8 +83,8 @@ function initial() {
       });
 
       new Role({
-        name: "admin"
-      }).save(err => {
+        name: "admin",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -90,4 +94,3 @@ function initial() {
     }
   });
 }
-
