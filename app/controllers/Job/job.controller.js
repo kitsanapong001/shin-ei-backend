@@ -53,7 +53,6 @@ exports.createJob = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log(123);
   Job.find({}, function (err, result) {
     if (err) {
       res.send({ message: "find all error" });
