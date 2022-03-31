@@ -36,10 +36,13 @@ exports.createJob = (req, res) => {
     balance: req.body.job.balance,
     first_qty: req.body.job.first_qty,
     first_date: req.body.job.first_date,
+    first_taninvdo: req.body.job.first_taninvdo,
     second_qty: req.body.job.second_qty,
     second_date: req.body.job.second_date,
+    second_taninvdo: req.body.job.second_taninvdo,
     third_qty: req.body.job.third_qty,
     third_date: req.body.job.third_date,
+    third_taninvdo: req.body.job.third_taninvdo,
   });
 
   job.save((err) => {
@@ -120,10 +123,13 @@ exports.update = (req, res) => {
       balance: req.body.job.balance,
       first_qty: req.body.job.first_qty,
       first_date: req.body.job.first_date,
+      first_taninvdo: req.body.job.first_taninvdo,
       second_qty: req.body.job.second_qty,
       second_date: req.body.job.second_date,
+      second_taninvdo: req.body.job.second_taninvdo,
       third_qty: req.body.job.third_qty,
       third_date: req.body.job.third_date,
+      third_taninvdo: req.body.job.third_taninvdo,
     },
     function (err, docs) {
       if (err) {

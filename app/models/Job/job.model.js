@@ -35,10 +35,14 @@ const Job = mongoose.model(
     balance: String,
     first_qty: String,
     first_date: { type: Date, default: null },
+    first_taninvdo: String,
     second_qty: String,
     second_date: { type: Date, default: null },
+    second_taninvdo: String,
     third_qty: String,
     third_date: { type: Date, default: null },
+    third_taninvdo: String,
+
   })
 );
 

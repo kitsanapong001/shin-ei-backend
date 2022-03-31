@@ -9,6 +9,8 @@ const Requests_job = mongoose.model(
     unit: String,
     unit_price: String,
     unit_total: String,
+    shipping: String,
+    balance: String,
     requests: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Request",

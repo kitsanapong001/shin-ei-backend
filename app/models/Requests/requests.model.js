@@ -5,6 +5,7 @@ const Request = mongoose.model(
   new mongoose.Schema({
     request_number: String,
     date: { type: Date, default: Date.now },
+    request_by: String,
   })
 );
 

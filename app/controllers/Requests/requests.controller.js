@@ -6,6 +6,7 @@ exports.createRequests = (req, res) => {
   const requests = new Requests({
     request_number: req.body.request_number,
     date: req.body.date,
+    request_by: req.body.request_by,
   });
   var errLog = 0;
   requests.save((errRq, last_id) => {
@@ -14,7 +15,6 @@ exports.createRequests = (req, res) => {
       return;
     }
     if (last_id) {
-      // console.log(last_id._id);
       req.body.job.forEach((element, index) => {
         const requests_job = new Requests_job({
           item_code: element.item_code,
@@ -23,6 +23,8 @@ exports.createRequests = (req, res) => {
           unit: element.unit,
           unit_price: element.unit_price,
           unit_total: element.unit_total,
+          shipping: element.shipping,
+          balance: element.balance,
           requests: last_id._id,
         });
         requests_job.save((errJob) => {
@@ -71,6 +73,7 @@ exports.update = (req, res) => {
     {
       request_number: req.body.requests.request_number,
       date: req.body.requests.date,
+      request_by: req.body.requests.request_by,
     },
     function (err, docs) {
       if (err) {
@@ -87,6 +90,8 @@ exports.update = (req, res) => {
               unit: element.unit,
               unit_price: element.unit_price,
               unit_total: element.unit_total,
+              shipping: element.shipping,
+              balance: element.balance,
             },
             function (errJob, docsJob) {
               if (errJob) {
@@ -129,14 +134,3 @@ exports.getRequests_job = (req, res) => {
     }
   );
 };
-// exports.getRequests_job = (req, res) => {
-//   Requests_job.find({}, function (err, result) {
-//     if (err) {
-//       res.send({ message: "find all error" });
-//     } else {
-//       res.json(result);
-//     }
-//   })
-//     .populate("requests", "-__v")
-//     .lean();
-// };
