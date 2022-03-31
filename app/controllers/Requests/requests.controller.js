@@ -46,15 +46,7 @@ exports.findAll = (req, res) => {
     if (err) {
       res.send({ message: "find all error" });
     } else {
-      //   Requests_job.find({ requests: result }, function (errJob, resultJob) {
-      //     if (errJob) {
-      //       res.send({ message: "find all error" });
-      //     } else {
-      //       result.push.apply(result, resultJob);
-      //       console.log(result);
-      //       res.json(result);
-      //     }
-      //   });
+      console.log(result);
       res.json(result);
     }
   });

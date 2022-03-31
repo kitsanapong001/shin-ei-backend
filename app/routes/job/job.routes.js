@@ -8,7 +8,6 @@ module.exports = function (app) {
     );
     next();
   });
-
   app.post("/api/job/createJob", controller.createJob);
   app.get("/api/job/getJob", controller.findAll);
   app.get("/api/job/getJobByID", controller.findOne);
