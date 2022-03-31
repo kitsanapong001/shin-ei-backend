@@ -1,15 +1,16 @@
+const { job } = require("../../models");
 const db = require("../../models");
 const Requests = db.requests;
 const Requests_job = db.requests_job;
 
-exports.createRequests = (req, res) => {
+exports.createRequests = async (req, res) => {
   const requests = new Requests({
     request_number: req.body.request_number,
     date: req.body.date,
     request_by: req.body.request_by,
   });
   var errLog = 0;
-  requests.save((errRq, last_id) => {
+  await requests.save((errRq, last_id) => {
     if (errRq) {
       errLog++;
       return;
@@ -27,14 +28,26 @@ exports.createRequests = (req, res) => {
           balance: element.balance,
           requests: last_id._id,
         });
-        requests_job.save((errJob) => {
+        requests_job.save((errJob, job_id) => {
           if (errJob) {
             errLog++;
             return;
+          } else {
+            Requests.findByIdAndUpdate(
+              last_id,
+              { $push: { job: job_id } },
+              function (err, docs) {
+                if (err) {
+                  errStatus++;
+                  console.log(err);
+                }
+              }
+            );
           }
         });
       });
     }
+
     if (errLog > 0) {
       res.send({ message: "Create requests error !" });
     } else {
@@ -68,6 +81,7 @@ exports.delete = (req, res) => {
 
 exports.update = (req, res) => {
   var errStatus = 0;
+  console.log(req.body.requests);
   Requests.findByIdAndUpdate(
     req.body.requests._id,
     {
@@ -80,10 +94,51 @@ exports.update = (req, res) => {
         errStatus++;
         console.log(err);
       } else {
+        // delete
+        req.body.requests.deleteTemp.forEach((element) => {
+          // delete request job
+          Requests_job.findByIdAndDelete(element, function (err, docs) {
+            if (err) {
+              errStatus++;
+              console.log(err);
+            }
+          });
+          // delete in array job
+          Requests.findByIdAndUpdate(
+            req.body.requests._id,
+            { $pull: { job: element } },
+            function (err, docs) {
+              if (err) {
+                errStatus++;
+                console.log(err);
+              }
+            }
+          );
+        });
+
+        // update request job
         req.body.requests.job.forEach((element) => {
-          Requests_job.findByIdAndUpdate(
-            element._id,
-            {
+          if (element._id) {
+            Requests_job.findByIdAndUpdate(
+              element._id,
+              {
+                item_code: element.item_code,
+                description: element.description,
+                qty: element.qty,
+                unit: element.unit,
+                unit_price: element.unit_price,
+                unit_total: element.unit_total,
+                shipping: element.shipping,
+                balance: element.balance,
+              },
+              function (errJob, docsJob) {
+                if (errJob) {
+                  errStatus++;
+                }
+              }
+            );
+          } else {
+            const requests_job = new Requests_job({
               item_code: element.item_code,
               description: element.description,
               qty: element.qty,
@@ -92,13 +147,26 @@ exports.update = (req, res) => {
               unit_total: element.unit_total,
               shipping: element.shipping,
               balance: element.balance,
-            },
-            function (errJob, docsJob) {
+              requests: req.body.requests._id,
+            });
+            requests_job.save((errJob, job_id) => {
               if (errJob) {
                 errStatus++;
+                return;
+              } else {
+                Requests.findByIdAndUpdate(
+                  req.body.requests._id,
+                  { $push: { job: job_id } },
+                  function (err, docs) {
+                    if (err) {
+                      errStatus++;
+                      console.log(err);
+                    }
+                  }
+                );
               }
-            }
-          );
+            });
+          }
         });
         if (errStatus > 0) {
           res.send({ message: "update error" });
@@ -123,14 +191,11 @@ exports.getByRequest = (req, res) => {
 
 exports.getRequests_job = (req, res) => {
   // console.log(req.query.id);
-  Requests_job.find(
-    { requests: { $in: req.query.id } },
-    function (err, result) {
-      if (err) {
-        res.send({ message: "find all error" });
-      } else {
-        res.json(result);
-      }
+  Requests_job.find({ _id: { $in: req.query.id } }, function (err, result) {
+    if (err) {
+      res.send({ message: "find all error" });
+    } else {
+      res.json(result);
     }
-  );
+  });
 };

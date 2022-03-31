@@ -6,6 +6,10 @@ const Request = mongoose.model(
     request_number: String,
     date: { type: Date, default: Date.now },
     request_by: String,
+    job: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Requests_job",
+    },
   })
 );
 
