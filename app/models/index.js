@@ -12,6 +12,7 @@ db.requests = require("./Requests/requests.model");
 db.request_ID = require("./RequestsID/requestsID.model");
 db.requests_job = require("./Requests/requests_job.modal");
 db.job = require("./Job/job.model");
+db.gen_id = require("./gen_id.modal");
 
 db.ROLES = ["user", "admin", "moderator"];
 

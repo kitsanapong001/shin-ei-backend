@@ -1,5 +1,6 @@
 const db = require("../../models");
 const Job = db.job;
+const Gen_ID = db.gen_id;
 
 // Create and Save a new Item code
 exports.createJob = (req, res) => {
@@ -50,6 +51,20 @@ exports.createJob = (req, res) => {
       res.status(500).send({ message: err });
       return;
     }
+    // add gen_id
+    const genID = new Gen_ID({
+      type: req.body.gen_id.type,
+      dateShort: req.body.gen_id.dateShort,
+      number: req.body.gen_id.number,
+      job_number: req.body.gen_id.job_number,
+      dateAt: (dateTime = new Date()),
+    });
+    genID.save((err) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+    });
 
     res.send({ message: "Create job successfully !" });
   });

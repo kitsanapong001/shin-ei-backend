@@ -52,6 +52,7 @@ require("./app/routes/Item_Code/item_code.routes")(app);
 require("./app/routes/requests/requests.routes")(app);
 require("./app/routes/requestsID/requestsID.routes")(app);
 require("./app/routes/job/job.routes")(app);
+require("./app/routes/gen_id.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
