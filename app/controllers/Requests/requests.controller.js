@@ -4,10 +4,12 @@ const Requests = db.requests;
 const Requests_job = db.requests_job;
 
 exports.createRequests = async (req, res) => {
+  console.log(req.body.requests);
+  // return;
   const requests = new Requests({
-    request_number: req.body.request_number,
-    date: req.body.date,
-    request_by: req.body.request_by,
+    request_number: req.body.requests.request_number,
+    date: req.body.requests.date,
+    request_by: req.body.requests.request_by,
   });
   var errLog = 0;
   await requests.save((errRq, last_id) => {
@@ -16,7 +18,7 @@ exports.createRequests = async (req, res) => {
       return;
     }
     if (last_id) {
-      req.body.job.forEach((element, index) => {
+      req.body.requests.job.forEach((element, index) => {
         const requests_job = new Requests_job({
           item_code: element.item_code,
           description: element.description,
@@ -27,6 +29,7 @@ exports.createRequests = async (req, res) => {
           shipping: element.shipping,
           balance: element.balance,
           requests: last_id._id,
+          tranfer: element.tranfer,
         });
         requests_job.save((errJob, job_id) => {
           if (errJob) {
@@ -130,6 +133,7 @@ exports.update = (req, res) => {
                 unit_total: element.unit_total,
                 shipping: element.shipping,
                 balance: element.balance,
+                tranfer: element.tranfer,
               },
               function (errJob, docsJob) {
                 if (errJob) {
@@ -148,6 +152,7 @@ exports.update = (req, res) => {
               shipping: element.shipping,
               balance: element.balance,
               requests: req.body.requests._id,
+              tranfer: element.tranfer,
             });
             requests_job.save((errJob, job_id) => {
               if (errJob) {
