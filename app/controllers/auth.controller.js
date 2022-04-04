@@ -91,7 +91,7 @@ exports.signin = (req, res) => {
 
       var token = jwt.sign({ id: user.id }, config.secret, {
         // expiresIn: 86400, // 24 hours
-        expiresIn: "1h", // 1 hours
+        expiresIn: "1h",
       });
 
       var authorities = [];
@@ -107,4 +107,20 @@ exports.signin = (req, res) => {
         accessToken: token,
       });
     });
+};
+
+exports.checkLoginToken = (req, res) => {
+  const token = req.body.user.accessToken;
+  if (!token) {
+    res.status(403).send({ message: "No token provided!" });
+  } else {
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) {
+        return res.status(200).send({ message: "Tokens expire!" });
+      }
+      res.status(200).send({
+        message: "ok",
+      });
+    });
+  }
 };

@@ -42,7 +42,7 @@ exports.createRequests = async (req, res) => {
               function (err, docs) {
                 if (err) {
                   errStatus++;
-                  console.log(err);
+                  // console.log(err);
                 }
               }
             );
@@ -64,7 +64,7 @@ exports.findAll = (req, res) => {
     if (err) {
       res.send({ message: "find all error" });
     } else {
-      console.log(result);
+      // console.log(result);
       res.json(result);
     }
   });
@@ -73,10 +73,10 @@ exports.findAll = (req, res) => {
 exports.delete = (req, res) => {
   Requests.findByIdAndDelete(req.body.id, function (err, docs) {
     if (err) {
-      console.log(err);
+      // console.log(err);
       res.send({ message: "delete error" });
     } else {
-      console.log("Deleted : ", docs);
+      // console.log("Deleted : ", docs);
       res.send({ message: "Delete requests successfully !" });
     }
   });
@@ -84,7 +84,7 @@ exports.delete = (req, res) => {
 
 exports.update = (req, res) => {
   var errStatus = 0;
-  console.log(req.body.requests);
+  // console.log(req.body.requests);
   Requests.findByIdAndUpdate(
     req.body.requests._id,
     {
@@ -95,7 +95,7 @@ exports.update = (req, res) => {
     function (err, docs) {
       if (err) {
         errStatus++;
-        console.log(err);
+        // console.log(err);
       } else {
         // delete
         req.body.requests.deleteTemp.forEach((element) => {
@@ -113,7 +113,7 @@ exports.update = (req, res) => {
             function (err, docs) {
               if (err) {
                 errStatus++;
-                console.log(err);
+                // console.log(err);
               }
             }
           );
@@ -165,7 +165,7 @@ exports.update = (req, res) => {
                   function (err, docs) {
                     if (err) {
                       errStatus++;
-                      console.log(err);
+                      // console.log(err);
                     }
                   }
                 );
@@ -176,7 +176,7 @@ exports.update = (req, res) => {
         if (errStatus > 0) {
           res.send({ message: "update error" });
         } else {
-          console.log("Updated request : ", docs);
+          // console.log("Updated request : ", docs);
           res.send({ message: "update requests successfully !" });
         }
       }
