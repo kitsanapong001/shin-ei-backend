@@ -14,6 +14,8 @@ const Job = mongoose.model(
     item_code: String,
     tool_name: String,
     posrno: String,
+    posrno2: String,
+    posrno3: String,
     qty: String,
     tool_type: String,
     dwg_number: String,
@@ -42,7 +44,6 @@ const Job = mongoose.model(
     third_qty: String,
     third_date: { type: Date, default: null },
     third_taninvdo: String,
-
   })
 );
 
