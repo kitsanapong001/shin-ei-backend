@@ -17,6 +17,7 @@ const Job = mongoose.model(
     posrno2: String,
     posrno3: String,
     qty: String,
+    unit: String,
     tool_type: String,
     dwg_number: String,
     request_delivery_date: { type: Date, default: null },
