@@ -45,6 +45,7 @@ const Job = mongoose.model(
     third_qty: String,
     third_date: { type: Date, default: null },
     third_taninvdo: String,
+    ssrrc: [],
   })
 );
 

@@ -49,6 +49,7 @@ exports.createJob = (req, res) => {
     third_qty: req.body.job.third_qty,
     third_date: req.body.job.third_date,
     third_taninvdo: req.body.job.third_taninvdo,
+    ssrrc: req.body.job.ssrrc,
   });
 
   job.save((err) => {
@@ -196,6 +197,7 @@ exports.update = (req, res) => {
       third_qty: req.body.job.third_qty,
       third_date: req.body.job.third_date,
       third_taninvdo: req.body.job.third_taninvdo,
+      ssrrc: req.body.job.ssrrc,
     },
     function (err, docs) {
       if (err) {
