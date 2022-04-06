@@ -13,4 +13,5 @@ module.exports = function (app) {
   app.get("/api/job/getJobByID", controller.findOne);
   app.delete("/api/job/deleteJob", controller.delete);
   app.patch("/api/job/updateJob", controller.update);
+  app.get("/api/job/getJobChart", controller.getJobChart);
 };

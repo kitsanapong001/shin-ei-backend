@@ -1,6 +1,8 @@
 const db = require("../../models");
 const Job = db.job;
 const Gen_ID = db.gen_id;
+const Requests = db.requests;
+const Requests_job = db.requests_job;
 
 // Create and Save a new Item code
 exports.createJob = (req, res) => {
@@ -81,6 +83,49 @@ exports.findAll = (req, res) => {
       res.json(result);
     }
   });
+};
+
+exports.getJobChart = (req, res) => {
+  let valResult = {
+    job: { jobTotal: 0, jobSuccess: 0, jobBalance: 0 },
+    request: { requestTotal: 0, requestSuccess: 0, requestBalance: 0 },
+  };
+  Requests.find({}, function (errRequestTotal, resultRequestTotal) {
+    valResult.request.requestTotal = resultRequestTotal;
+    // success request
+    Requests_job.find(
+      { balance: "0" },
+      function (errJobSuccess, resultRequestSuccess) {
+        valResult.request.requestSuccess = resultRequestSuccess.length;
+        // balance request
+        Requests_job.find(
+          { balance: { $gt: "0" } },
+          function (errJobSuccess, resultRequestBalance) {
+            valResult.request.requestBalance = resultRequestBalance.length;
+            // total job
+            Job.find({}, function (errJobTotal, resultJobTotal) {
+              valResult.job.jobTotal = resultJobTotal;
+              // success job
+              Job.find(
+                { balance: "0" },
+                function (errJobSuccess, resultJobSuccess) {
+                  valResult.job.jobSuccess = resultJobSuccess.length;
+                  // balancejob
+                  Job.find(
+                    { balance: { $gt: "0" } },
+                    function (errJobSuccess, resultJobBalance) {
+                      valResult.job.jobBalance = resultJobBalance.length;
+                      res.json(valResult);
+                    }
+                  );
+                }
+              );
+            }).count();
+          }
+        );
+      }
+    );
+  }).count();
 };
 
 exports.findOne = (req, res) => {
