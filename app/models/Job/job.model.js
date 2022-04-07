@@ -46,6 +46,7 @@ const Job = mongoose.model(
     third_date: { type: Date, default: null },
     third_taninvdo: String,
     ssrrc: [],
+    remark: String,
   })
 );
 
