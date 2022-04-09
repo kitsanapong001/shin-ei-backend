@@ -7,7 +7,7 @@ const Job = mongoose.model(
     date: { type: Date, default: null },
     request_by: String,
     request_id: String,
-    supplier: String,
+    supplier: [],
     supplier_other: String,
     customer: String,
     customer_other: String,
