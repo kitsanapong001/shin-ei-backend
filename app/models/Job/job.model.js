@@ -47,6 +47,7 @@ const Job = mongoose.model(
     third_taninvdo: String,
     ssrrc: [],
     remark: String,
+    shipping: [],
   })
 );
 

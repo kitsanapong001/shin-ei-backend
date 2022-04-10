@@ -76,7 +76,13 @@ exports.delete = (req, res) => {
       // console.log(err);
       res.send({ message: "delete error" });
     } else {
-      // console.log("Deleted : ", docs);
+      // delete request job
+      Requests_job.deleteMany({ requests: req.body.id }, function (err, docs) {
+        if (err) {
+          console.log(err);
+        }
+      });
+
       res.send({ message: "Delete requests successfully !" });
     }
   });

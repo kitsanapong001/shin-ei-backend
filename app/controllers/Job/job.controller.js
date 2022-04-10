@@ -51,6 +51,7 @@ exports.createJob = (req, res) => {
     third_taninvdo: req.body.job.third_taninvdo,
     ssrrc: req.body.job.ssrrc,
     remark: req.body.job.remark,
+    shipping: req.body.job.shipping,
   });
 
   job.save((err) => {
@@ -200,6 +201,7 @@ exports.update = (req, res) => {
       third_taninvdo: req.body.job.third_taninvdo,
       ssrrc: req.body.job.ssrrc,
       remark: req.body.job.remark,
+      shipping: req.body.job.shipping,
     },
     function (err, docs) {
       if (err) {
