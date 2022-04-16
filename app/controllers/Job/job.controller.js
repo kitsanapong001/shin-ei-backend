@@ -89,10 +89,32 @@ exports.findAll = (req, res) => {
 };
 
 exports.getJobChart = (req, res) => {
-  let valResult = {
+  var valResult = {
     job: { jobTotal: 0, jobSuccess: 0, jobBalance: 0 },
     request: { requestTotal: 0, requestSuccess: 0, requestBalance: 0 },
+    dataLineJob: [],
+    dataLineRequest: [],
   };
+
+  // for (let index = 0; index < 12; index++) {
+  //   Job.find({}, function (errdataLine, resultDataLine) {
+  //     valResult.dataLineJob[index] = resultDataLine;
+  //   })
+  //     .find({
+  //       $expr: {
+  //         $and: [
+  //           { $eq: [{ $year: "$date" }, 2022] },
+  //           { $eq: [{ $month: "$date" }, index + 1] },
+  //         ],
+  //       },
+  //     })
+  //     .count();
+  // }
+
+  // setTimeout(() => {
+  //   console.log(valResult);
+  // }, 4000);
+
   Requests.find({}, function (errRequestTotal, resultRequestTotal) {
     valResult.request.requestTotal = resultRequestTotal;
     // success request
@@ -118,7 +140,42 @@ exports.getJobChart = (req, res) => {
                     { balance: { $gt: "0" } },
                     function (errJobSuccess, resultJobBalance) {
                       valResult.job.jobBalance = resultJobBalance.length;
-                      res.json(valResult);
+                      // dataLineJob
+                      for (let index = 0; index < 12; index++) {
+                        Job.find({}, function (errdataLine, resultDataLineJob) {
+                          valResult.dataLineJob[index] = resultDataLineJob;
+                        })
+                          .find({
+                            $expr: {
+                              $and: [
+                                { $eq: [{ $year: "$date" }, 2022] },
+                                { $eq: [{ $month: "$date" }, index + 1] },
+                              ],
+                            },
+                          })
+                          .count();
+                      }
+                      // dataLineRequest
+                      for (let index = 0; index < 12; index++) {
+                        Requests.find(
+                          {},
+                          function (errDataLineRq, resultDataLineRq) {
+                            valResult.dataLineRequest[index] = resultDataLineRq;
+                          }
+                        )
+                          .find({
+                            $expr: {
+                              $and: [
+                                { $eq: [{ $year: "$date" }, 2022] },
+                                { $eq: [{ $month: "$date" }, index + 1] },
+                              ],
+                            },
+                          })
+                          .count();
+                      }
+                      setTimeout(() => {
+                        res.json(valResult);
+                      }, 4000);
                     }
                   );
                 }
