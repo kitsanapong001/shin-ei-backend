@@ -96,25 +96,6 @@ exports.getJobChart = (req, res) => {
     dataLineRequest: [],
   };
 
-  // for (let index = 0; index < 12; index++) {
-  //   Job.find({}, function (errdataLine, resultDataLine) {
-  //     valResult.dataLineJob[index] = resultDataLine;
-  //   })
-  //     .find({
-  //       $expr: {
-  //         $and: [
-  //           { $eq: [{ $year: "$date" }, 2022] },
-  //           { $eq: [{ $month: "$date" }, index + 1] },
-  //         ],
-  //       },
-  //     })
-  //     .count();
-  // }
-
-  // setTimeout(() => {
-  //   console.log(valResult);
-  // }, 4000);
-
   Requests.find({}, function (errRequestTotal, resultRequestTotal) {
     valResult.request.requestTotal = resultRequestTotal;
     // success request

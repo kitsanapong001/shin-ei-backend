@@ -201,7 +201,6 @@ exports.getByRequest = (req, res) => {
 };
 
 exports.getRequests_job = (req, res) => {
-  // console.log(req.query.id);
   Requests_job.find({ _id: { $in: req.query.id } }, function (err, result) {
     if (err) {
       res.send({ message: "find all error" });

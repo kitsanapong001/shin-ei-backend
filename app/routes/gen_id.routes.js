@@ -9,10 +9,5 @@ module.exports = function (app) {
     next();
   });
 
-  // app.post("/api/gen_id/createGenID", controller.createGenID);
   app.get("/api/gen_id/getGenID", controller.findAll);
-
-  // app.get("/api/item/getItemByID", controller.findOne);
-  // app.delete("/api/item/deleteItem", controller.delete);
-  // app.patch("/api/item/updateItem", controller.update);
 };

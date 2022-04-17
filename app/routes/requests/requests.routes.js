@@ -1,5 +1,5 @@
 const controller = require("../../controllers/Requests/requests.controller");
-
+const { authJwt } = require("../../middlewares");
 module.exports = function (app) {
   app.use(function (req, res, next) {
     res.header(
@@ -9,10 +9,34 @@ module.exports = function (app) {
     next();
   });
 
-  app.post("/api/requests/createRequests", controller.createRequests);
-  app.get("/api/requests/getRequests", controller.findAll);
-  app.get("/api/requests/getByRequestID", controller.getByRequest);
-  app.delete("/api/requests/deleteRequests", controller.delete);
-  app.patch("/api/requests/updateRequests", controller.update);
-  app.get("/api/requests/getRequests_job", controller.getRequests_job);
+  app.post(
+    "/api/requests/createRequests",
+    [authJwt.verifyToken],
+    controller.createRequests
+  );
+  app.get(
+    "/api/requests/getRequests",
+    [authJwt.verifyToken],
+    controller.findAll
+  );
+  app.get(
+    "/api/requests/getByRequestID",
+    [authJwt.verifyToken],
+    controller.getByRequest
+  );
+  app.delete(
+    "/api/requests/deleteRequests",
+    [authJwt.verifyToken],
+    controller.delete
+  );
+  app.patch(
+    "/api/requests/updateRequests",
+    [authJwt.verifyToken],
+    controller.update
+  );
+  app.get(
+    "/api/requests/getRequests_job",
+    [authJwt.verifyToken],
+    controller.getRequests_job
+  );
 };

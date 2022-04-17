@@ -1,5 +1,5 @@
 const controller = require("../../controllers/Job/job.controller");
-
+const { authJwt } = require("../../middlewares");
 module.exports = function (app) {
   app.use(function (req, res, next) {
     res.header(
@@ -8,10 +8,10 @@ module.exports = function (app) {
     );
     next();
   });
-  app.post("/api/job/createJob", controller.createJob);
-  app.get("/api/job/getJob", controller.findAll);
-  app.get("/api/job/getJobByID", controller.findOne);
-  app.delete("/api/job/deleteJob", controller.delete);
-  app.patch("/api/job/updateJob", controller.update);
+  app.post("/api/job/createJob", [authJwt.verifyToken], controller.createJob);
+  app.get("/api/job/getJob", [authJwt.verifyToken], controller.findAll);
+  app.get("/api/job/getJobByID", [authJwt.verifyToken], controller.findOne);
+  app.delete("/api/job/deleteJob", [authJwt.verifyToken], controller.delete);
+  app.patch("/api/job/updateJob", [authJwt.verifyToken], controller.update);
   app.get("/api/job/getJobChart", controller.getJobChart);
 };
