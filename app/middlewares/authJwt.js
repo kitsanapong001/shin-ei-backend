@@ -10,9 +10,10 @@ verifyToken = (req, res, next) => {
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
-    // if (err) {
-    //   return res.status(401).send({ message: "Unauthorized!" });
-    // }
+    if (err) {
+      console.log(err);
+      return res.status(401).send({ message: "Unauthorized!" });
+    }
     // console.log(decoded);
     // req.userId = decoded.id;
     next();
