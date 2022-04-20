@@ -30,6 +30,7 @@ exports.createRequests = async (req, res) => {
           balance: element.balance,
           requests: last_id._id,
           tranfer: element.tranfer,
+          date: req.body.requests.date,
         });
         requests_job.save((errJob, job_id) => {
           if (errJob) {
@@ -140,6 +141,7 @@ exports.update = (req, res) => {
                 shipping: element.shipping,
                 balance: element.balance,
                 tranfer: element.tranfer,
+                date: req.body.requests.date,
               },
               function (errJob, docsJob) {
                 if (errJob) {
@@ -159,6 +161,7 @@ exports.update = (req, res) => {
               balance: element.balance,
               requests: req.body.requests._id,
               tranfer: element.tranfer,
+              date: req.body.requests.date,
             });
             requests_job.save((errJob, job_id) => {
               if (errJob) {

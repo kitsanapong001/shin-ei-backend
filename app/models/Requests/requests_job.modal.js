@@ -16,6 +16,7 @@ const Requests_job = mongoose.model(
       ref: "Request",
     },
     tranfer: [],
+    date: { type: Date, default: Date.now },
   })
 );
 

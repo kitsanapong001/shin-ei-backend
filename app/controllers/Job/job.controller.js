@@ -89,6 +89,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.getJobChart = (req, res) => {
+  var year = parseInt(req.query.year);
   var valResult = {
     job: { jobTotal: 0, jobSuccess: 0, jobBalance: 0 },
     request: { requestTotal: 0, requestSuccess: 0, requestBalance: 0 },
@@ -129,7 +130,7 @@ exports.getJobChart = (req, res) => {
                           .find({
                             $expr: {
                               $and: [
-                                { $eq: [{ $year: "$date" }, 2022] },
+                                { $eq: [{ $year: "$date" }, year] },
                                 { $eq: [{ $month: "$date" }, index + 1] },
                               ],
                             },
@@ -147,7 +148,7 @@ exports.getJobChart = (req, res) => {
                           .find({
                             $expr: {
                               $and: [
-                                { $eq: [{ $year: "$date" }, 2022] },
+                                { $eq: [{ $year: "$date" }, year] },
                                 { $eq: [{ $month: "$date" }, index + 1] },
                               ],
                             },
@@ -158,15 +159,43 @@ exports.getJobChart = (req, res) => {
                         res.json(valResult);
                       }, 4000);
                     }
-                  );
+                  ).find({
+                    $expr: {
+                      $and: [{ $eq: [{ $year: "$date" }, year] }],
+                    },
+                  });
                 }
-              );
-            }).count();
+              ).find({
+                $expr: {
+                  $and: [{ $eq: [{ $year: "$date" }, year] }],
+                },
+              });
+            })
+              .find({
+                $expr: {
+                  $and: [{ $eq: [{ $year: "$date" }, year] }],
+                },
+              })
+              .count();
           }
-        );
+        ).find({
+          $expr: {
+            $and: [{ $eq: [{ $year: "$date" }, year] }],
+          },
+        });
       }
-    );
-  }).count();
+    ).find({
+      $expr: {
+        $and: [{ $eq: [{ $year: "$date" }, year] }],
+      },
+    });
+  })
+    .find({
+      $expr: {
+        $and: [{ $eq: [{ $year: "$date" }, year] }],
+      },
+    })
+    .count();
 };
 
 exports.findOne = (req, res) => {
