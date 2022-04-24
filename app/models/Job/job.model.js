@@ -16,6 +16,8 @@ const Job = mongoose.model(
     posrno: String,
     posrno2: String,
     posrno3: String,
+    posrno4: String,
+    posrno5: String,
     qty: String,
     unit: String,
     tool_type: String,
