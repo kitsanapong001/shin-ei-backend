@@ -54,6 +54,7 @@ exports.createJob = (req, res) => {
     ssrrc: req.body.job.ssrrc,
     remark: req.body.job.remark,
     shipping: req.body.job.shipping,
+    dateCreate: (dateTime = new Date()),
   });
 
   job.save((err) => {
@@ -81,13 +82,14 @@ exports.createJob = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
+  var mysort = { dateCreate: -1 };
   Job.find({}, function (err, result) {
     if (err) {
       res.send({ message: "find all error" });
     } else {
       res.json(result);
     }
-  });
+  }).sort(mysort);
 };
 
 exports.getJobChart = (req, res) => {

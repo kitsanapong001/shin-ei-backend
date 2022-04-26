@@ -50,6 +50,7 @@ const Job = mongoose.model(
     ssrrc: [],
     remark: String,
     shipping: [],
+    dateCreate: { type: Date, default: null },
   })
 );
 
