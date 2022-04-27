@@ -214,3 +214,25 @@ exports.getRequests_job = (req, res) => {
     }
   });
 };
+
+exports.getRequestAndRequestJob = (req, res) => {
+  Requests.aggregate(
+    [
+      {
+        $lookup: {
+          from: "requests_jobs",
+          localField: "_id",
+          foreignField: "requests",
+          as: "requests_jobs",
+        },
+      },
+    ],
+    function (err, result) {
+      if (err) {
+        res.send({ message: "find all error" });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+};

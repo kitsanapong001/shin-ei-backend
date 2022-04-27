@@ -39,4 +39,9 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.getRequests_job
   );
+  app.get(
+    "/api/requests/getRequestAndRequestJob",
+    [authJwt.verifyToken],
+    controller.getRequestAndRequestJob
+  );
 };
