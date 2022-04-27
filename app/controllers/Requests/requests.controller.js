@@ -4,12 +4,12 @@ const Requests = db.requests;
 const Requests_job = db.requests_job;
 
 exports.createRequests = async (req, res) => {
-  console.log(req.body.requests);
   // return;
   const requests = new Requests({
     request_number: req.body.requests.request_number,
     date: req.body.requests.date,
     request_by: req.body.requests.request_by,
+    dateCreate: (dateTime = new Date()),
   });
   var errLog = 0;
   await requests.save((errRq, last_id) => {
@@ -31,6 +31,7 @@ exports.createRequests = async (req, res) => {
           requests: last_id._id,
           tranfer: element.tranfer,
           date: req.body.requests.date,
+          dateCreate: (dateTime = new Date()),
         });
         requests_job.save((errJob, job_id) => {
           if (errJob) {
@@ -61,6 +62,7 @@ exports.createRequests = async (req, res) => {
 };
 
 exports.findAll = (req, res) => {
+  var mysort = { dateCreate: -1 };
   Requests.find({}, function (err, result) {
     if (err) {
       res.send({ message: "find all error" });
@@ -68,7 +70,7 @@ exports.findAll = (req, res) => {
       // console.log(result);
       res.json(result);
     }
-  });
+  }).sort(mysort);
 };
 
 exports.delete = (req, res) => {

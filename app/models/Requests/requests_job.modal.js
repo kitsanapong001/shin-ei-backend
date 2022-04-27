@@ -17,6 +17,7 @@ const Requests_job = mongoose.model(
     },
     tranfer: [],
     date: { type: Date, default: Date.now },
+    dateCreate: { type: Date, default: null },
   })
 );
 
