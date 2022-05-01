@@ -81,7 +81,43 @@ exports.createJob = (req, res) => {
   });
 };
 
+// exports.findAll = (req, res) => {
+//   var mysort = { dateCreate: -1 };
+//   Job.find({}, function (err, result) {
+//     if (err) {
+//       res.send({ message: "find all error" });
+//     } else {
+//       res.json(result);
+//     }
+//   }).sort(mysort);
+// };
 exports.findAll = (req, res) => {
+  var mysort = { dateCreate: -1 };
+  var year = parseInt(req.query.year);
+  var conditon = {};
+  console.log(year);
+  if (year == 0 || !year) {
+    conditon = {};
+  } else {
+    conditon = {
+      $expr: {
+        $and: [{ $eq: [{ $year: "$date" }, year] }],
+      },
+    };
+    console.log(year);
+  }
+  Job.find({}, function (err, result) {
+    if (err) {
+      res.send({ message: "find all error" });
+    } else {
+      res.json(result);
+    }
+  })
+    .sort(mysort)
+    .find(conditon);
+};
+
+exports.findAllInYear = (req, res) => {
   var mysort = { dateCreate: -1 };
   Job.find({}, function (err, result) {
     if (err) {
@@ -100,7 +136,6 @@ exports.getJobChart = (req, res) => {
     dataLineJob: [],
     dataLineRequest: [],
   };
-
   Requests.find({}, function (errRequestTotal, resultRequestTotal) {
     valResult.request.requestTotal = resultRequestTotal;
     // success request

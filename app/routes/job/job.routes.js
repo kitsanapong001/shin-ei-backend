@@ -14,4 +14,9 @@ module.exports = function (app) {
   app.delete("/api/job/deleteJob", [authJwt.verifyToken], controller.delete);
   app.patch("/api/job/updateJob", [authJwt.verifyToken], controller.update);
   app.get("/api/job/getJobChart", controller.getJobChart);
+  app.get(
+    "/api/job/getJobInYear",
+    [authJwt.verifyToken],
+    controller.findAllInYear
+  );
 };
